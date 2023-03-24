@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cmg-test-service
+spec:
+  selector:
+    app: cmg-test
+  ports:
+  - protocol: "TCP"
+    port: 6000
+    targetPort: 5000
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cmg-test
+spec:
+  selector:
+    matchLabels:
+      app: cmg-test
+  replicas: 4
+  template:
+    metadata:
+      labels:
+        app: cmg-test
+    spec:
+      containers:
+      - name: cmg-test
+        image: cmg-test:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+
+
+        #I've tried to insert this as a job, but not so successful.
